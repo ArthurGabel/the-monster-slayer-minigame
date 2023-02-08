@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Monster Slayer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="app.js" defer></script>
+  </head>
+
+  <body>
+    <header>
+      <h1>Monster Slayer</h1>
+    </header>
+    <div id="game">
+      <section id="monster" class="container">
+        <h2>Monster Health</h2>
+        <div class="healthbar">
+          <div class="healthbar__value" :style="monsterHealthBar"></div>
+        </div>
+      </section>
+      <section id="player" class="container">
+        <h2>Your Health</h2>
+        <div class="healthbar">
+          <div class="healthbar__value" :style="playerHealthBar"></div>
+        </div>
+      </section>
+      <section id="game-over" class="container" v-if="winner">
+        <h2>Game Over!</h2>
+        <h3>{{ winnerMsg }}</h3>
+        <button @click="resetGame">Try again!</button>
+      </section>
+      <section id="controls" v-else>
+        <button @click="playerAttack">ATTACK</button>
+        <button @click="playerSpecialAttack" :disabled="disableSpecialAttaack">SPECIAL ATTACK</button>
+        <button @click="healPlayer">HEAL</button>
+        <button @click="surrender">SURRENDER</button>
+      </section>
+      <section id="log" class="container">
+        <h2>Battle Log</h2>
+        <ul>
+          <li class="container" v-for="roundlog in battleLog">
+            <h4>Round: {{ roundlog.round }}</h4>
+            <div id="player-log">
+              <p>
+                <span class="log--player ">Player </span>
+                <span v-if="roundlog.player.actionType === 'attack'">attacked: <span
+                    class="log--damage">{{ roundlog.player.actionPower }} dmg.</span></span>
+                <span v-else-if="roundlog.player.actionType === 'special-attack'">launched a special attack: <span
+                    class="log--damage">{{ roundlog.player.actionPower }} dmg.</span></span>
+                <span v-else>heled: <span class="log--heal">{{ roundlog.player.actionPower }} points.</span></span>
+              </p>
+            </div>
+            <div id="monster-log">
+              <p>
+                <span class="log--monster ">Monster </span>
+                <span v-if="roundlog.monster.actionType === 'attack'">attacked: <span
+                    class="log--damage">{{ roundlog.monster.actionPower }} dmg.</span></span>
+                <span v-else-if="roundlog.monster.actionType === 'special-attack'">launched a special attack: <span
+                    class="log--damage">{{ roundlog.monster.actionPower }} dmg.</span></span>
+                <span v-else>heled: <span class="log--heal">{{ roundlog.monster.actionPower }} points.</span></span>
+              </p>
+            </div>
+          </li>
+        </ul>
+      </section>
+    </div>
+  </body>
+
+</html>
